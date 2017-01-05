@@ -19,6 +19,10 @@ class Player:
         self.hand.remove(card)
         # execute card's actions
 
+        if card.action == 'lose':
+            self.out = True
+        print(card)
+
     def discard(self):
         if self.hand[0].value() == 8:
             self.out = True
@@ -75,8 +79,15 @@ if __name__ == '__main__':
         p.draw()
 
     # Game loop
+    done = False
+    while not deck.empty() and not done:
+        for i, p in enumerate(players):
+            if all(x.out for x in (players[:i] + players[i+1:])):
+                print('Player {} wins'.format(p.name))
+                done = True
+                break
 
-    players[0].draw()
+            print(p.name)
+            p.draw()
 
-    for p in players:
-        print('{}: {}'.format(p.name, p.hand))
+            p.play(0)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import random
-from card import *
+from card import get_card
 
 
 class Player:
@@ -37,15 +37,15 @@ class Deck:
         self.index = 1
 
         for _ in range(5):
-            self.cards.append(card(1))
+            self.cards.append(get_card(1))
         for _ in range(2):
-            self.cards.append(card(2))
-            self.cards.append(card(3))
-            self.cards.append(card(4))
-            self.cards.append(card(5))
-        self.cards.append(card(6))
-        self.cards.append(card(7))
-        self.cards.append(card(8))
+            self.cards.append(get_card(2))
+            self.cards.append(get_card(3))
+            self.cards.append(get_card(4))
+            self.cards.append(get_card(5))
+        self.cards.append(get_card(6))
+        self.cards.append(get_card(7))
+        self.cards.append(get_card(8))
 
         self.shuffle()
 

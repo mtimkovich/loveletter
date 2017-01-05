@@ -66,7 +66,7 @@ class Joker(Card):
         self.action = 'lose'
 
 
-def card(v):
+def get_card(v):
     return {
         1: Batman,
         2: Catwoman,

@@ -10,35 +10,54 @@ class Player:
         self.deck = deck
         self.points = 0
         self.out = False
+        self.is_immune = False
+
+    def status(self, *msg):
+        print(self.name, *msg)
 
     def draw(self):
+        self.status('draws a card')
         self.hand.append(self.deck.draw())
+
+    def todo(self, a):
+        print('TODO:', a, 'not defined')
+
+    def nop(self):
+        pass
+
+    def lose(self):
+        self.status('is out of this round')
+        self.out = True
+
+    def immune(self):
+        self.status('is immune until next turn')
+        self.is_immune = True
 
     def play(self, card_index):
         card = self.hand[card_index]
         self.hand.remove(card)
+
+        self.status('played', card.name)
+
         # execute card's actions
+        getattr(self, card.action, lambda: self.todo(card.action))()
+        print()
 
-        if card.action == 'lose':
-            self.out = True
-        print(card)
+    # def discard(self):
+    #     self.status('discarded', self.hand[0].name)
 
-    def discard(self):
-        if self.hand[0].value() == 8:
-            self.out = True
+    #     if self.hand[0].value == 8:
+    #         self.lose()
 
-        print('Discarded ' + self.hand[0])
-        self.hand = []
+    #     self.hand = []
 
-        if not self.out:
-            self.draw()
+    #     if not self.out:
+    #         self.draw()
 
 
 class Deck:
     def __init__(self):
         self.cards = []
-        # Index is set to 1 to simulate "discarding" the top card
-        self.index = 1
 
         for _ in range(5):
             self.cards.append(get_card(1))
@@ -55,6 +74,7 @@ class Deck:
 
     def shuffle(self):
         random.shuffle(self.cards)
+        # Index is set to 1 to simulate "discarding" the top card
         self.index = 1
 
     def empty(self):
@@ -77,17 +97,23 @@ if __name__ == '__main__':
 
     for p in players:
         p.draw()
+    print()
 
     # Game loop
     done = False
+    players_out = 0
     while not deck.empty() and not done:
         for i, p in enumerate(players):
-            if all(x.out for x in (players[:i] + players[i+1:])):
-                print('Player {} wins'.format(p.name))
+            # Check if p is the last player alive
+            if players_out == len(players)-1:
+                print('Player', p.name, 'wins')
                 done = True
                 break
 
-            print(p.name)
-            p.draw()
+            p.is_immune = False
 
+            p.draw()
             p.play(0)
+
+            if p.out:
+                players_out += 1

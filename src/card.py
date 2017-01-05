@@ -56,7 +56,7 @@ class HarleyQuinn(Card):
         self.name = 'Harley Quinn'
         self.value = 7
         self.rules = 'Discard if caught with TWO-FACE or POISON IVY'
-        self.action = ''
+        self.action = 'nop'
 
 
 class Joker(Card):

@@ -10,7 +10,9 @@ if __name__ == '__main__':
         Player('Two', deck)
     ]
 
-    for p in players:
+    for i, p in enumerate(players):
+        p.players = players
+        p.index = i
         p.draw()
     print()
 
